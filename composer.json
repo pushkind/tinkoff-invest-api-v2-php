@@ -19,7 +19,7 @@
     "minimum-stability": "dev",
     "require": {
         "php": ">=7.4.0",
-        "ext-grpc": "^1.43",
+        "ext-grpc": "^1.42",
         "grpc/grpc": "^1.42",
         "google/protobuf": "^3.19"
     },
