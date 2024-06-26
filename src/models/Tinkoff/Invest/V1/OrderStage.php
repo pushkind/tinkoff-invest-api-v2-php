@@ -16,7 +16,7 @@ use Google\Protobuf\Internal\GPBUtil;
 class OrderStage extends \Google\Protobuf\Internal\Message
 {
     /**
-     *Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
+     *Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue price = 1;</code>
      */
@@ -28,11 +28,17 @@ class OrderStage extends \Google\Protobuf\Internal\Message
      */
     protected $quantity = 0;
     /**
-     *Идентификатор торговой операции.
+     *Идентификатор сделки.
      *
      * Generated from protobuf field <code>string trade_id = 3;</code>
      */
     protected $trade_id = '';
+    /**
+     *Время исполнения сделки
+     *
+     * Generated from protobuf field <code>.google.protobuf.Timestamp execution_time = 5;</code>
+     */
+    protected $execution_time = null;
 
     /**
      * Constructor.
@@ -41,11 +47,13 @@ class OrderStage extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type \Tinkoff\Invest\V1\MoneyValue $price
-     *          Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
+     *          Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
      *     @type int|string $quantity
      *          Количество лотов.
      *     @type string $trade_id
-     *          Идентификатор торговой операции.
+     *          Идентификатор сделки.
+     *     @type \Google\Protobuf\Timestamp $execution_time
+     *          Время исполнения сделки
      * }
      */
     public function __construct($data = NULL) {
@@ -54,7 +62,7 @@ class OrderStage extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
+     *Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue price = 1;</code>
      * @return \Tinkoff\Invest\V1\MoneyValue|null
@@ -75,7 +83,7 @@ class OrderStage extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
+     *Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue price = 1;</code>
      * @param \Tinkoff\Invest\V1\MoneyValue $var
@@ -116,7 +124,7 @@ class OrderStage extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Идентификатор торговой операции.
+     *Идентификатор сделки.
      *
      * Generated from protobuf field <code>string trade_id = 3;</code>
      * @return string
@@ -127,7 +135,7 @@ class OrderStage extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Идентификатор торговой операции.
+     *Идентификатор сделки.
      *
      * Generated from protobuf field <code>string trade_id = 3;</code>
      * @param string $var
@@ -137,6 +145,42 @@ class OrderStage extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->trade_id = $var;
+
+        return $this;
+    }
+
+    /**
+     *Время исполнения сделки
+     *
+     * Generated from protobuf field <code>.google.protobuf.Timestamp execution_time = 5;</code>
+     * @return \Google\Protobuf\Timestamp|null
+     */
+    public function getExecutionTime()
+    {
+        return isset($this->execution_time) ? $this->execution_time : null;
+    }
+
+    public function hasExecutionTime()
+    {
+        return isset($this->execution_time);
+    }
+
+    public function clearExecutionTime()
+    {
+        unset($this->execution_time);
+    }
+
+    /**
+     *Время исполнения сделки
+     *
+     * Generated from protobuf field <code>.google.protobuf.Timestamp execution_time = 5;</code>
+     * @param \Google\Protobuf\Timestamp $var
+     * @return $this
+     */
+    public function setExecutionTime($var)
+    {
+        GPBUtil::checkMessage($var, \Google\Protobuf\Timestamp::class);
+        $this->execution_time = $var;
 
         return $this;
     }

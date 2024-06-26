@@ -40,7 +40,7 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
      */
     protected $average_position_price = null;
     /**
-     *Текущая рассчитанная относительная доходность позиции, в %.
+     *Текущая рассчитанная доходность позиции.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation expected_yield = 5;</code>
      */
@@ -52,29 +52,67 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
      */
     protected $current_nkd = null;
     /**
-     *Средняя цена лота в позиции в пунктах (для фьючерсов). **Возможна задержка до секунды для пересчёта**.
+     * Deprecated Средняя цена позиции в пунктах (для фьючерсов). **Возможна задержка до секунды для пересчёта**.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation average_position_price_pt = 7;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation average_position_price_pt = 7 [deprecated = true];</code>
+     * @deprecated
      */
     protected $average_position_price_pt = null;
     /**
-     *Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
+     *Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue current_price = 8;</code>
      */
     protected $current_price = null;
     /**
-     *Средняя цена лота в позиции по методу FIFO. **Возможна задержка до секунды для пересчёта**.
+     *Средняя цена позиции по методу FIFO. **Возможна задержка до секунды для пересчёта**.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue average_position_price_fifo = 9;</code>
      */
     protected $average_position_price_fifo = null;
     /**
-     *Количество лотов в портфеле.
+     *Deprecated Количество лотов в портфеле.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation quantity_lots = 10;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation quantity_lots = 10 [deprecated = true];</code>
+     * @deprecated
      */
     protected $quantity_lots = null;
+    /**
+     *Заблокировано на бирже.
+     *
+     * Generated from protobuf field <code>bool blocked = 21;</code>
+     */
+    protected $blocked = false;
+    /**
+     *Количество бумаг, заблокированных выставленными заявками.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation blocked_lots = 22;</code>
+     */
+    protected $blocked_lots = null;
+    /**
+     *position_uid-идентификатора инструмента
+     *
+     * Generated from protobuf field <code>string position_uid = 24;</code>
+     */
+    protected $position_uid = '';
+    /**
+     *instrument_uid-идентификатора инструмента
+     *
+     * Generated from protobuf field <code>string instrument_uid = 25;</code>
+     */
+    protected $instrument_uid = '';
+    /**
+     *Вариационная маржа
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue var_margin = 26;</code>
+     */
+    protected $var_margin = null;
+    /**
+     *Текущая рассчитанная доходность позиции.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation expected_yield_fifo = 27;</code>
+     */
+    protected $expected_yield_fifo = null;
 
     /**
      * Constructor.
@@ -91,17 +129,29 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
      *     @type \Tinkoff\Invest\V1\MoneyValue $average_position_price
      *          Средневзвешенная цена позиции. **Возможна задержка до секунды для пересчёта**.
      *     @type \Tinkoff\Invest\V1\Quotation $expected_yield
-     *          Текущая рассчитанная относительная доходность позиции, в %.
+     *          Текущая рассчитанная доходность позиции.
      *     @type \Tinkoff\Invest\V1\MoneyValue $current_nkd
      *           Текущий НКД.
      *     @type \Tinkoff\Invest\V1\Quotation $average_position_price_pt
-     *          Средняя цена лота в позиции в пунктах (для фьючерсов). **Возможна задержка до секунды для пересчёта**.
+     *           Deprecated Средняя цена позиции в пунктах (для фьючерсов). **Возможна задержка до секунды для пересчёта**.
      *     @type \Tinkoff\Invest\V1\MoneyValue $current_price
-     *          Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
+     *          Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
      *     @type \Tinkoff\Invest\V1\MoneyValue $average_position_price_fifo
-     *          Средняя цена лота в позиции по методу FIFO. **Возможна задержка до секунды для пересчёта**.
+     *          Средняя цена позиции по методу FIFO. **Возможна задержка до секунды для пересчёта**.
      *     @type \Tinkoff\Invest\V1\Quotation $quantity_lots
-     *          Количество лотов в портфеле.
+     *          Deprecated Количество лотов в портфеле.
+     *     @type bool $blocked
+     *          Заблокировано на бирже.
+     *     @type \Tinkoff\Invest\V1\Quotation $blocked_lots
+     *          Количество бумаг, заблокированных выставленными заявками.
+     *     @type string $position_uid
+     *          position_uid-идентификатора инструмента
+     *     @type string $instrument_uid
+     *          instrument_uid-идентификатора инструмента
+     *     @type \Tinkoff\Invest\V1\MoneyValue $var_margin
+     *          Вариационная маржа
+     *     @type \Tinkoff\Invest\V1\Quotation $expected_yield_fifo
+     *          Текущая рассчитанная доходность позиции.
      * }
      */
     public function __construct($data = NULL) {
@@ -234,7 +284,7 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Текущая рассчитанная относительная доходность позиции, в %.
+     *Текущая рассчитанная доходность позиции.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation expected_yield = 5;</code>
      * @return \Tinkoff\Invest\V1\Quotation|null
@@ -255,7 +305,7 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Текущая рассчитанная относительная доходность позиции, в %.
+     *Текущая рассчитанная доходность позиции.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation expected_yield = 5;</code>
      * @param \Tinkoff\Invest\V1\Quotation $var
@@ -306,35 +356,41 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Средняя цена лота в позиции в пунктах (для фьючерсов). **Возможна задержка до секунды для пересчёта**.
+     * Deprecated Средняя цена позиции в пунктах (для фьючерсов). **Возможна задержка до секунды для пересчёта**.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation average_position_price_pt = 7;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation average_position_price_pt = 7 [deprecated = true];</code>
      * @return \Tinkoff\Invest\V1\Quotation|null
+     * @deprecated
      */
     public function getAveragePositionPricePt()
     {
+        @trigger_error('average_position_price_pt is deprecated.', E_USER_DEPRECATED);
         return isset($this->average_position_price_pt) ? $this->average_position_price_pt : null;
     }
 
     public function hasAveragePositionPricePt()
     {
+        @trigger_error('average_position_price_pt is deprecated.', E_USER_DEPRECATED);
         return isset($this->average_position_price_pt);
     }
 
     public function clearAveragePositionPricePt()
     {
+        @trigger_error('average_position_price_pt is deprecated.', E_USER_DEPRECATED);
         unset($this->average_position_price_pt);
     }
 
     /**
-     *Средняя цена лота в позиции в пунктах (для фьючерсов). **Возможна задержка до секунды для пересчёта**.
+     * Deprecated Средняя цена позиции в пунктах (для фьючерсов). **Возможна задержка до секунды для пересчёта**.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation average_position_price_pt = 7;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation average_position_price_pt = 7 [deprecated = true];</code>
      * @param \Tinkoff\Invest\V1\Quotation $var
      * @return $this
+     * @deprecated
      */
     public function setAveragePositionPricePt($var)
     {
+        @trigger_error('average_position_price_pt is deprecated.', E_USER_DEPRECATED);
         GPBUtil::checkMessage($var, \Tinkoff\Invest\V1\Quotation::class);
         $this->average_position_price_pt = $var;
 
@@ -342,7 +398,7 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
+     *Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue current_price = 8;</code>
      * @return \Tinkoff\Invest\V1\MoneyValue|null
@@ -363,7 +419,7 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента..
+     *Текущая цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue current_price = 8;</code>
      * @param \Tinkoff\Invest\V1\MoneyValue $var
@@ -378,7 +434,7 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Средняя цена лота в позиции по методу FIFO. **Возможна задержка до секунды для пересчёта**.
+     *Средняя цена позиции по методу FIFO. **Возможна задержка до секунды для пересчёта**.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue average_position_price_fifo = 9;</code>
      * @return \Tinkoff\Invest\V1\MoneyValue|null
@@ -399,7 +455,7 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Средняя цена лота в позиции по методу FIFO. **Возможна задержка до секунды для пересчёта**.
+     *Средняя цена позиции по методу FIFO. **Возможна задержка до секунды для пересчёта**.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue average_position_price_fifo = 9;</code>
      * @param \Tinkoff\Invest\V1\MoneyValue $var
@@ -414,37 +470,229 @@ class PortfolioPosition extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Количество лотов в портфеле.
+     *Deprecated Количество лотов в портфеле.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation quantity_lots = 10;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation quantity_lots = 10 [deprecated = true];</code>
      * @return \Tinkoff\Invest\V1\Quotation|null
+     * @deprecated
      */
     public function getQuantityLots()
     {
+        @trigger_error('quantity_lots is deprecated.', E_USER_DEPRECATED);
         return isset($this->quantity_lots) ? $this->quantity_lots : null;
     }
 
     public function hasQuantityLots()
     {
+        @trigger_error('quantity_lots is deprecated.', E_USER_DEPRECATED);
         return isset($this->quantity_lots);
     }
 
     public function clearQuantityLots()
     {
+        @trigger_error('quantity_lots is deprecated.', E_USER_DEPRECATED);
         unset($this->quantity_lots);
     }
 
     /**
-     *Количество лотов в портфеле.
+     *Deprecated Количество лотов в портфеле.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation quantity_lots = 10;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation quantity_lots = 10 [deprecated = true];</code>
      * @param \Tinkoff\Invest\V1\Quotation $var
      * @return $this
+     * @deprecated
      */
     public function setQuantityLots($var)
     {
+        @trigger_error('quantity_lots is deprecated.', E_USER_DEPRECATED);
         GPBUtil::checkMessage($var, \Tinkoff\Invest\V1\Quotation::class);
         $this->quantity_lots = $var;
+
+        return $this;
+    }
+
+    /**
+     *Заблокировано на бирже.
+     *
+     * Generated from protobuf field <code>bool blocked = 21;</code>
+     * @return bool
+     */
+    public function getBlocked()
+    {
+        return $this->blocked;
+    }
+
+    /**
+     *Заблокировано на бирже.
+     *
+     * Generated from protobuf field <code>bool blocked = 21;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setBlocked($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->blocked = $var;
+
+        return $this;
+    }
+
+    /**
+     *Количество бумаг, заблокированных выставленными заявками.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation blocked_lots = 22;</code>
+     * @return \Tinkoff\Invest\V1\Quotation|null
+     */
+    public function getBlockedLots()
+    {
+        return isset($this->blocked_lots) ? $this->blocked_lots : null;
+    }
+
+    public function hasBlockedLots()
+    {
+        return isset($this->blocked_lots);
+    }
+
+    public function clearBlockedLots()
+    {
+        unset($this->blocked_lots);
+    }
+
+    /**
+     *Количество бумаг, заблокированных выставленными заявками.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation blocked_lots = 22;</code>
+     * @param \Tinkoff\Invest\V1\Quotation $var
+     * @return $this
+     */
+    public function setBlockedLots($var)
+    {
+        GPBUtil::checkMessage($var, \Tinkoff\Invest\V1\Quotation::class);
+        $this->blocked_lots = $var;
+
+        return $this;
+    }
+
+    /**
+     *position_uid-идентификатора инструмента
+     *
+     * Generated from protobuf field <code>string position_uid = 24;</code>
+     * @return string
+     */
+    public function getPositionUid()
+    {
+        return $this->position_uid;
+    }
+
+    /**
+     *position_uid-идентификатора инструмента
+     *
+     * Generated from protobuf field <code>string position_uid = 24;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setPositionUid($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->position_uid = $var;
+
+        return $this;
+    }
+
+    /**
+     *instrument_uid-идентификатора инструмента
+     *
+     * Generated from protobuf field <code>string instrument_uid = 25;</code>
+     * @return string
+     */
+    public function getInstrumentUid()
+    {
+        return $this->instrument_uid;
+    }
+
+    /**
+     *instrument_uid-идентификатора инструмента
+     *
+     * Generated from protobuf field <code>string instrument_uid = 25;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setInstrumentUid($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->instrument_uid = $var;
+
+        return $this;
+    }
+
+    /**
+     *Вариационная маржа
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue var_margin = 26;</code>
+     * @return \Tinkoff\Invest\V1\MoneyValue|null
+     */
+    public function getVarMargin()
+    {
+        return isset($this->var_margin) ? $this->var_margin : null;
+    }
+
+    public function hasVarMargin()
+    {
+        return isset($this->var_margin);
+    }
+
+    public function clearVarMargin()
+    {
+        unset($this->var_margin);
+    }
+
+    /**
+     *Вариационная маржа
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.MoneyValue var_margin = 26;</code>
+     * @param \Tinkoff\Invest\V1\MoneyValue $var
+     * @return $this
+     */
+    public function setVarMargin($var)
+    {
+        GPBUtil::checkMessage($var, \Tinkoff\Invest\V1\MoneyValue::class);
+        $this->var_margin = $var;
+
+        return $this;
+    }
+
+    /**
+     *Текущая рассчитанная доходность позиции.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation expected_yield_fifo = 27;</code>
+     * @return \Tinkoff\Invest\V1\Quotation|null
+     */
+    public function getExpectedYieldFifo()
+    {
+        return isset($this->expected_yield_fifo) ? $this->expected_yield_fifo : null;
+    }
+
+    public function hasExpectedYieldFifo()
+    {
+        return isset($this->expected_yield_fifo);
+    }
+
+    public function clearExpectedYieldFifo()
+    {
+        unset($this->expected_yield_fifo);
+    }
+
+    /**
+     *Текущая рассчитанная доходность позиции.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation expected_yield_fifo = 27;</code>
+     * @param \Tinkoff\Invest\V1\Quotation $var
+     * @return $this
+     */
+    public function setExpectedYieldFifo($var)
+    {
+        GPBUtil::checkMessage($var, \Tinkoff\Invest\V1\Quotation::class);
+        $this->expected_yield_fifo = $var;
 
         return $this;
     }

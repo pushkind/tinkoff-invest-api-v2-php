@@ -9,14 +9,14 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *Последние обезличенные сделки по инструменту.
+ *Обезличенных сделок за последний час.
  *
  * Generated from protobuf message <code>tinkoff.public.invest.api.contract.v1.GetLastTradesResponse</code>
  */
 class GetLastTradesResponse extends \Google\Protobuf\Internal\Message
 {
     /**
-     *Массив сделок
+     *Массив сделок.
      *
      * Generated from protobuf field <code>repeated .tinkoff.public.invest.api.contract.v1.Trade trades = 1;</code>
      */
@@ -29,7 +29,7 @@ class GetLastTradesResponse extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type \Tinkoff\Invest\V1\Trade[]|\Google\Protobuf\Internal\RepeatedField $trades
-     *          Массив сделок
+     *          Массив сделок.
      * }
      */
     public function __construct($data = NULL) {
@@ -38,7 +38,7 @@ class GetLastTradesResponse extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Массив сделок
+     *Массив сделок.
      *
      * Generated from protobuf field <code>repeated .tinkoff.public.invest.api.contract.v1.Trade trades = 1;</code>
      * @return \Google\Protobuf\Internal\RepeatedField
@@ -49,7 +49,7 @@ class GetLastTradesResponse extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Массив сделок
+     *Массив сделок.
      *
      * Generated from protobuf field <code>repeated .tinkoff.public.invest.api.contract.v1.Trade trades = 1;</code>
      * @param \Tinkoff\Invest\V1\Trade[]|\Google\Protobuf\Internal\RepeatedField $var

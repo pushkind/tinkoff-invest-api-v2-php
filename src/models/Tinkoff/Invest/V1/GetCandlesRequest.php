@@ -16,29 +16,42 @@ use Google\Protobuf\Internal\GPBUtil;
 class GetCandlesRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     *Figi-идентификатор инструмента.
+     *Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
      *
-     * Generated from protobuf field <code>string figi = 1;</code>
+     * Generated from protobuf field <code>string figi = 1 [deprecated = true];</code>
+     * @deprecated
      */
-    protected $figi = '';
+    protected $figi = null;
     /**
      *Начало запрашиваемого периода в часовом поясе UTC.
      *
-     * Generated from protobuf field <code>.google.protobuf.Timestamp from = 2;</code>
+     * Generated from protobuf field <code>.google.protobuf.Timestamp from = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     protected $from = null;
     /**
      *Окончание запрашиваемого периода в часовом поясе UTC.
      *
-     * Generated from protobuf field <code>.google.protobuf.Timestamp to = 3;</code>
+     * Generated from protobuf field <code>.google.protobuf.Timestamp to = 3 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     protected $to = null;
     /**
      *Интервал запрошенных свечей.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.CandleInterval interval = 4;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.CandleInterval interval = 4 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     protected $interval = 0;
+    /**
+     *Идентификатор инструмента, принимает значение figi или instrument_uid.
+     *
+     * Generated from protobuf field <code>string instrument_id = 5;</code>
+     */
+    protected $instrument_id = null;
+    /**
+     *Тип источника свечи
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.GetCandlesRequest.CandleSource candle_source_type = 7;</code>
+     */
+    protected $candle_source_type = null;
 
     /**
      * Constructor.
@@ -47,13 +60,17 @@ class GetCandlesRequest extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $figi
-     *          Figi-идентификатор инструмента.
+     *          Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
      *     @type \Google\Protobuf\Timestamp $from
      *          Начало запрашиваемого периода в часовом поясе UTC.
      *     @type \Google\Protobuf\Timestamp $to
      *          Окончание запрашиваемого периода в часовом поясе UTC.
      *     @type int $interval
      *          Интервал запрошенных свечей.
+     *     @type string $instrument_id
+     *          Идентификатор инструмента, принимает значение figi или instrument_uid.
+     *     @type int $candle_source_type
+     *          Тип источника свечи
      * }
      */
     public function __construct($data = NULL) {
@@ -62,25 +79,41 @@ class GetCandlesRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Figi-идентификатор инструмента.
+     *Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
      *
-     * Generated from protobuf field <code>string figi = 1;</code>
+     * Generated from protobuf field <code>string figi = 1 [deprecated = true];</code>
      * @return string
+     * @deprecated
      */
     public function getFigi()
     {
-        return $this->figi;
+        @trigger_error('figi is deprecated.', E_USER_DEPRECATED);
+        return isset($this->figi) ? $this->figi : '';
+    }
+
+    public function hasFigi()
+    {
+        @trigger_error('figi is deprecated.', E_USER_DEPRECATED);
+        return isset($this->figi);
+    }
+
+    public function clearFigi()
+    {
+        @trigger_error('figi is deprecated.', E_USER_DEPRECATED);
+        unset($this->figi);
     }
 
     /**
-     *Figi-идентификатор инструмента.
+     *Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
      *
-     * Generated from protobuf field <code>string figi = 1;</code>
+     * Generated from protobuf field <code>string figi = 1 [deprecated = true];</code>
      * @param string $var
      * @return $this
+     * @deprecated
      */
     public function setFigi($var)
     {
+        @trigger_error('figi is deprecated.', E_USER_DEPRECATED);
         GPBUtil::checkString($var, True);
         $this->figi = $var;
 
@@ -90,7 +123,7 @@ class GetCandlesRequest extends \Google\Protobuf\Internal\Message
     /**
      *Начало запрашиваемого периода в часовом поясе UTC.
      *
-     * Generated from protobuf field <code>.google.protobuf.Timestamp from = 2;</code>
+     * Generated from protobuf field <code>.google.protobuf.Timestamp from = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      * @return \Google\Protobuf\Timestamp|null
      */
     public function getFrom()
@@ -111,7 +144,7 @@ class GetCandlesRequest extends \Google\Protobuf\Internal\Message
     /**
      *Начало запрашиваемого периода в часовом поясе UTC.
      *
-     * Generated from protobuf field <code>.google.protobuf.Timestamp from = 2;</code>
+     * Generated from protobuf field <code>.google.protobuf.Timestamp from = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      * @param \Google\Protobuf\Timestamp $var
      * @return $this
      */
@@ -126,7 +159,7 @@ class GetCandlesRequest extends \Google\Protobuf\Internal\Message
     /**
      *Окончание запрашиваемого периода в часовом поясе UTC.
      *
-     * Generated from protobuf field <code>.google.protobuf.Timestamp to = 3;</code>
+     * Generated from protobuf field <code>.google.protobuf.Timestamp to = 3 [(.google.api.field_behavior) = REQUIRED];</code>
      * @return \Google\Protobuf\Timestamp|null
      */
     public function getTo()
@@ -147,7 +180,7 @@ class GetCandlesRequest extends \Google\Protobuf\Internal\Message
     /**
      *Окончание запрашиваемого периода в часовом поясе UTC.
      *
-     * Generated from protobuf field <code>.google.protobuf.Timestamp to = 3;</code>
+     * Generated from protobuf field <code>.google.protobuf.Timestamp to = 3 [(.google.api.field_behavior) = REQUIRED];</code>
      * @param \Google\Protobuf\Timestamp $var
      * @return $this
      */
@@ -162,7 +195,7 @@ class GetCandlesRequest extends \Google\Protobuf\Internal\Message
     /**
      *Интервал запрошенных свечей.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.CandleInterval interval = 4;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.CandleInterval interval = 4 [(.google.api.field_behavior) = REQUIRED];</code>
      * @return int
      */
     public function getInterval()
@@ -173,7 +206,7 @@ class GetCandlesRequest extends \Google\Protobuf\Internal\Message
     /**
      *Интервал запрошенных свечей.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.CandleInterval interval = 4;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.CandleInterval interval = 4 [(.google.api.field_behavior) = REQUIRED];</code>
      * @param int $var
      * @return $this
      */
@@ -181,6 +214,78 @@ class GetCandlesRequest extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkEnum($var, \Tinkoff\Invest\V1\CandleInterval::class);
         $this->interval = $var;
+
+        return $this;
+    }
+
+    /**
+     *Идентификатор инструмента, принимает значение figi или instrument_uid.
+     *
+     * Generated from protobuf field <code>string instrument_id = 5;</code>
+     * @return string
+     */
+    public function getInstrumentId()
+    {
+        return isset($this->instrument_id) ? $this->instrument_id : '';
+    }
+
+    public function hasInstrumentId()
+    {
+        return isset($this->instrument_id);
+    }
+
+    public function clearInstrumentId()
+    {
+        unset($this->instrument_id);
+    }
+
+    /**
+     *Идентификатор инструмента, принимает значение figi или instrument_uid.
+     *
+     * Generated from protobuf field <code>string instrument_id = 5;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setInstrumentId($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->instrument_id = $var;
+
+        return $this;
+    }
+
+    /**
+     *Тип источника свечи
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.GetCandlesRequest.CandleSource candle_source_type = 7;</code>
+     * @return int
+     */
+    public function getCandleSourceType()
+    {
+        return isset($this->candle_source_type) ? $this->candle_source_type : 0;
+    }
+
+    public function hasCandleSourceType()
+    {
+        return isset($this->candle_source_type);
+    }
+
+    public function clearCandleSourceType()
+    {
+        unset($this->candle_source_type);
+    }
+
+    /**
+     *Тип источника свечи
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.GetCandlesRequest.CandleSource candle_source_type = 7;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setCandleSourceType($var)
+    {
+        GPBUtil::checkEnum($var, \Tinkoff\Invest\V1\GetCandlesRequest\CandleSource::class);
+        $this->candle_source_type = $var;
 
         return $this;
     }

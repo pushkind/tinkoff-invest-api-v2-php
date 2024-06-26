@@ -16,19 +16,20 @@ use Google\Protobuf\Internal\GPBUtil;
 class PostOrderRequest extends \Google\Protobuf\Internal\Message
 {
     /**
-     *Figi-идентификатор инструмента.
+     *Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
      *
-     * Generated from protobuf field <code>string figi = 1;</code>
+     * Generated from protobuf field <code>string figi = 1 [deprecated = true];</code>
+     * @deprecated
      */
-    protected $figi = '';
+    protected $figi = null;
     /**
      *Количество лотов.
      *
-     * Generated from protobuf field <code>int64 quantity = 2;</code>
+     * Generated from protobuf field <code>int64 quantity = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     protected $quantity = 0;
     /**
-     *Цена одного инструмента. Для получения стоимости лота требуется умножить на лотность инструмента.
+     *Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента. Игнорируется для рыночных поручений.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation price = 3;</code>
      */
@@ -36,27 +37,45 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     /**
      *Направление операции.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderDirection direction = 4;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderDirection direction = 4 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     protected $direction = 0;
     /**
      *Номер счёта.
      *
-     * Generated from protobuf field <code>string account_id = 5;</code>
+     * Generated from protobuf field <code>string account_id = 5 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     protected $account_id = '';
     /**
      *Тип заявки.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderType order_type = 6;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderType order_type = 6 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     protected $order_type = 0;
     /**
-     *Идентификатор запроса выставления поручения для целей идемпотентности. Максимальная длина 36 символов.
+     *Идентификатор запроса выставления поручения для целей идемпотентности в формате UID. Максимальная длина 36 символов.
      *
-     * Generated from protobuf field <code>string order_id = 7;</code>
+     * Generated from protobuf field <code>string order_id = 7 [(.google.api.field_behavior) = REQUIRED];</code>
      */
     protected $order_id = '';
+    /**
+     *Идентификатор инструмента, принимает значения Figi или Instrument_uid.
+     *
+     * Generated from protobuf field <code>string instrument_id = 8;</code>
+     */
+    protected $instrument_id = '';
+    /**
+     *Алгоритм исполнения поручения, применяется только к лимитной заявке.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.TimeInForceType time_in_force = 9;</code>
+     */
+    protected $time_in_force = 0;
+    /**
+     *Тип цены.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.PriceType price_type = 10;</code>
+     */
+    protected $price_type = 0;
 
     /**
      * Constructor.
@@ -65,11 +84,11 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
      *     Optional. Data for populating the Message object.
      *
      *     @type string $figi
-     *          Figi-идентификатор инструмента.
+     *          Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
      *     @type int|string $quantity
      *          Количество лотов.
      *     @type \Tinkoff\Invest\V1\Quotation $price
-     *          Цена одного инструмента. Для получения стоимости лота требуется умножить на лотность инструмента.
+     *          Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента. Игнорируется для рыночных поручений.
      *     @type int $direction
      *          Направление операции.
      *     @type string $account_id
@@ -77,7 +96,13 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
      *     @type int $order_type
      *          Тип заявки.
      *     @type string $order_id
-     *          Идентификатор запроса выставления поручения для целей идемпотентности. Максимальная длина 36 символов.
+     *          Идентификатор запроса выставления поручения для целей идемпотентности в формате UID. Максимальная длина 36 символов.
+     *     @type string $instrument_id
+     *          Идентификатор инструмента, принимает значения Figi или Instrument_uid.
+     *     @type int $time_in_force
+     *          Алгоритм исполнения поручения, применяется только к лимитной заявке.
+     *     @type int $price_type
+     *          Тип цены.
      * }
      */
     public function __construct($data = NULL) {
@@ -86,25 +111,41 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Figi-идентификатор инструмента.
+     *Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
      *
-     * Generated from protobuf field <code>string figi = 1;</code>
+     * Generated from protobuf field <code>string figi = 1 [deprecated = true];</code>
      * @return string
+     * @deprecated
      */
     public function getFigi()
     {
-        return $this->figi;
+        @trigger_error('figi is deprecated.', E_USER_DEPRECATED);
+        return isset($this->figi) ? $this->figi : '';
+    }
+
+    public function hasFigi()
+    {
+        @trigger_error('figi is deprecated.', E_USER_DEPRECATED);
+        return isset($this->figi);
+    }
+
+    public function clearFigi()
+    {
+        @trigger_error('figi is deprecated.', E_USER_DEPRECATED);
+        unset($this->figi);
     }
 
     /**
-     *Figi-идентификатор инструмента.
+     *Deprecated Figi-идентификатор инструмента. Необходимо использовать instrument_id.
      *
-     * Generated from protobuf field <code>string figi = 1;</code>
+     * Generated from protobuf field <code>string figi = 1 [deprecated = true];</code>
      * @param string $var
      * @return $this
+     * @deprecated
      */
     public function setFigi($var)
     {
+        @trigger_error('figi is deprecated.', E_USER_DEPRECATED);
         GPBUtil::checkString($var, True);
         $this->figi = $var;
 
@@ -114,7 +155,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     /**
      *Количество лотов.
      *
-     * Generated from protobuf field <code>int64 quantity = 2;</code>
+     * Generated from protobuf field <code>int64 quantity = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      * @return int|string
      */
     public function getQuantity()
@@ -125,7 +166,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     /**
      *Количество лотов.
      *
-     * Generated from protobuf field <code>int64 quantity = 2;</code>
+     * Generated from protobuf field <code>int64 quantity = 2 [(.google.api.field_behavior) = REQUIRED];</code>
      * @param int|string $var
      * @return $this
      */
@@ -138,7 +179,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Цена одного инструмента. Для получения стоимости лота требуется умножить на лотность инструмента.
+     *Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента. Игнорируется для рыночных поручений.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation price = 3;</code>
      * @return \Tinkoff\Invest\V1\Quotation|null
@@ -159,7 +200,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Цена одного инструмента. Для получения стоимости лота требуется умножить на лотность инструмента.
+     *Цена за 1 инструмент. Для получения стоимости лота требуется умножить на лотность инструмента. Игнорируется для рыночных поручений.
      *
      * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.Quotation price = 3;</code>
      * @param \Tinkoff\Invest\V1\Quotation $var
@@ -176,7 +217,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     /**
      *Направление операции.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderDirection direction = 4;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderDirection direction = 4 [(.google.api.field_behavior) = REQUIRED];</code>
      * @return int
      */
     public function getDirection()
@@ -187,7 +228,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     /**
      *Направление операции.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderDirection direction = 4;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderDirection direction = 4 [(.google.api.field_behavior) = REQUIRED];</code>
      * @param int $var
      * @return $this
      */
@@ -202,7 +243,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     /**
      *Номер счёта.
      *
-     * Generated from protobuf field <code>string account_id = 5;</code>
+     * Generated from protobuf field <code>string account_id = 5 [(.google.api.field_behavior) = REQUIRED];</code>
      * @return string
      */
     public function getAccountId()
@@ -213,7 +254,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     /**
      *Номер счёта.
      *
-     * Generated from protobuf field <code>string account_id = 5;</code>
+     * Generated from protobuf field <code>string account_id = 5 [(.google.api.field_behavior) = REQUIRED];</code>
      * @param string $var
      * @return $this
      */
@@ -228,7 +269,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     /**
      *Тип заявки.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderType order_type = 6;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderType order_type = 6 [(.google.api.field_behavior) = REQUIRED];</code>
      * @return int
      */
     public function getOrderType()
@@ -239,7 +280,7 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     /**
      *Тип заявки.
      *
-     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderType order_type = 6;</code>
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.OrderType order_type = 6 [(.google.api.field_behavior) = REQUIRED];</code>
      * @param int $var
      * @return $this
      */
@@ -252,9 +293,9 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Идентификатор запроса выставления поручения для целей идемпотентности. Максимальная длина 36 символов.
+     *Идентификатор запроса выставления поручения для целей идемпотентности в формате UID. Максимальная длина 36 символов.
      *
-     * Generated from protobuf field <code>string order_id = 7;</code>
+     * Generated from protobuf field <code>string order_id = 7 [(.google.api.field_behavior) = REQUIRED];</code>
      * @return string
      */
     public function getOrderId()
@@ -263,9 +304,9 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     }
 
     /**
-     *Идентификатор запроса выставления поручения для целей идемпотентности. Максимальная длина 36 символов.
+     *Идентификатор запроса выставления поручения для целей идемпотентности в формате UID. Максимальная длина 36 символов.
      *
-     * Generated from protobuf field <code>string order_id = 7;</code>
+     * Generated from protobuf field <code>string order_id = 7 [(.google.api.field_behavior) = REQUIRED];</code>
      * @param string $var
      * @return $this
      */
@@ -273,6 +314,84 @@ class PostOrderRequest extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkString($var, True);
         $this->order_id = $var;
+
+        return $this;
+    }
+
+    /**
+     *Идентификатор инструмента, принимает значения Figi или Instrument_uid.
+     *
+     * Generated from protobuf field <code>string instrument_id = 8;</code>
+     * @return string
+     */
+    public function getInstrumentId()
+    {
+        return $this->instrument_id;
+    }
+
+    /**
+     *Идентификатор инструмента, принимает значения Figi или Instrument_uid.
+     *
+     * Generated from protobuf field <code>string instrument_id = 8;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setInstrumentId($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->instrument_id = $var;
+
+        return $this;
+    }
+
+    /**
+     *Алгоритм исполнения поручения, применяется только к лимитной заявке.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.TimeInForceType time_in_force = 9;</code>
+     * @return int
+     */
+    public function getTimeInForce()
+    {
+        return $this->time_in_force;
+    }
+
+    /**
+     *Алгоритм исполнения поручения, применяется только к лимитной заявке.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.TimeInForceType time_in_force = 9;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setTimeInForce($var)
+    {
+        GPBUtil::checkEnum($var, \Tinkoff\Invest\V1\TimeInForceType::class);
+        $this->time_in_force = $var;
+
+        return $this;
+    }
+
+    /**
+     *Тип цены.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.PriceType price_type = 10;</code>
+     * @return int
+     */
+    public function getPriceType()
+    {
+        return $this->price_type;
+    }
+
+    /**
+     *Тип цены.
+     *
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.PriceType price_type = 10;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setPriceType($var)
+    {
+        GPBUtil::checkEnum($var, \Tinkoff\Invest\V1\PriceType::class);
+        $this->price_type = $var;
 
         return $this;
     }

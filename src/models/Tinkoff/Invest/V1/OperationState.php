@@ -20,7 +20,7 @@ class OperationState
      */
     const OPERATION_STATE_UNSPECIFIED = 0;
     /**
-     *Исполнена.
+     *Исполнена частично или полностью.
      *
      * Generated from protobuf enum <code>OPERATION_STATE_EXECUTED = 1;</code>
      */
@@ -31,11 +31,18 @@ class OperationState
      * Generated from protobuf enum <code>OPERATION_STATE_CANCELED = 2;</code>
      */
     const OPERATION_STATE_CANCELED = 2;
+    /**
+     *Исполняется.
+     *
+     * Generated from protobuf enum <code>OPERATION_STATE_PROGRESS = 3;</code>
+     */
+    const OPERATION_STATE_PROGRESS = 3;
 
     private static $valueToName = [
         self::OPERATION_STATE_UNSPECIFIED => 'OPERATION_STATE_UNSPECIFIED',
         self::OPERATION_STATE_EXECUTED => 'OPERATION_STATE_EXECUTED',
         self::OPERATION_STATE_CANCELED => 'OPERATION_STATE_CANCELED',
+        self::OPERATION_STATE_PROGRESS => 'OPERATION_STATE_PROGRESS',
     ];
 
     public static function name($value)

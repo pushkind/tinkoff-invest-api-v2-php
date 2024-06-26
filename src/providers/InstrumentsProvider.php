@@ -26,6 +26,7 @@ use Tinkoff\Invest\V1\InstrumentRequest;
 use Tinkoff\Invest\V1\InstrumentResponse;
 use Tinkoff\Invest\V1\InstrumentsRequest;
 use Tinkoff\Invest\V1\InstrumentStatus;
+use Tinkoff\Invest\V1\SecurityTradingStatus;
 use Tinkoff\Invest\V1\Share;
 use Tinkoff\Invest\V1\ShareResponse;
 use Tinkoff\Invest\V1\SharesResponse;
@@ -189,6 +190,10 @@ class InstrumentsProvider extends BaseDataProvider
     /**
      * Метод получения инструмента типа {@link Bond} по тикеру
      *
+     * ВАЖНО: Использование тикера для поиска инструментов идея "так себе", потому что одному тикеру может соответствовать несколько
+     * инструментов с разным FIGI. В методе сделана доработка, чтобы он пытался найти инструмент, у которого "tradingStatus":"SECURITY_TRADING_STATUS_NORMAL_TRADING".
+     * Метод вернет первый найденный инструмент с таким tradingStatus, если такового не обнаружится, то метод вернет ПОСЛЕДНИЙ в списке инструмент с указанным тикером
+     *
      * @param string $ticker Тикер инструмента
      * @param string|null $class_name Режим торгов или <code>null</code>, тогда будет возвращен первый найденный
      * @param bool $refresh Признак необходимости получить новые данные из API Tinkoff Invest и обновить кэш. По умолчанию равно <code>false</code>
@@ -197,10 +202,14 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Bond|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function bondByTicker(string $ticker, string $class_name = null, bool $refresh = false, bool $raise = true): ?Bond
     {
         try {
+            $found_instrument_candidate_1 = null;
+            $found_instrument_candidate_2 = null;
+
             $instrument_type = 'bond';
             $instrument_id_type = InstrumentIdType::INSTRUMENT_ID_TYPE_TICKER;
 
@@ -236,9 +245,25 @@ class InstrumentsProvider extends BaseDataProvider
 
                 foreach ($instruments as $instrument) {
                     if ($instrument->getTicker() === $ticker) {
-                        return $instrument;
+                        $found_instrument_candidate_1 = $instrument;
+
+                        if ($instrument->getTradingStatus() === SecurityTradingStatus::SECURITY_TRADING_STATUS_NORMAL_TRADING) {
+                            $found_instrument_candidate_2 = $instrument;
+                        }
+
+                        if ($instrument->getTradingStatus() === SecurityTradingStatus::SECURITY_TRADING_STATUS_NORMAL_TRADING && $instrument->getApiTradeAvailableFlag()) {
+                            return $instrument;
+                        }
                     }
                 }
+            }
+
+            if ($found_instrument_candidate_2) {
+                return $found_instrument_candidate_2;
+            }
+
+            if ($found_instrument_candidate_1) {
+                return $found_instrument_candidate_1;
             }
 
             throw new InstrumentNotFoundException('Instrument is not found');
@@ -261,6 +286,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Bond|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function bondByFigi(string $figi, bool $refresh = false, bool $raise = true): ?Bond
     {
@@ -294,6 +320,49 @@ class InstrumentsProvider extends BaseDataProvider
     }
 
     /**
+     * Метод получения инструмента типа {@link Bond} по UID
+     *
+     * @param string $uid UID инструмента
+     * @param bool $refresh Признак необходимости получить новые данные из API Tinkoff Invest и обновить кэш. По умолчанию равно <code>false</code>
+     * @param bool $raise Признак необходимость бросить исключение, если инструмент не найден. По умолчанию равно <code>true</code>
+     *
+     * @return Bond|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
+     *
+     * @throws InstrumentNotFoundException
+     * @throws Exception
+     */
+    public function bondByUid(string $uid, bool $refresh = false, bool $raise = true): ?Bond
+    {
+        try {
+            $instrument_type = 'bond';
+
+            if (!$refresh) {
+                if ($instrument = $this->getCachedInstrumentByUid($instrument_type, $uid)) {
+                    return $instrument;
+                }
+            }
+
+            if (!$this->_is_bonds_loaded || $refresh) {
+                $instruments = $this->loadAllBonds();
+
+                foreach ($instruments as $instrument) {
+                    if ($instrument->getUid() === $uid) {
+                        return $instrument;
+                    }
+                }
+            }
+
+            throw new InstrumentNotFoundException('Instrument is not found');
+        } catch (InstrumentNotFoundException $e) {
+            if ($raise) {
+                throw  $e;
+            }
+
+            return null;
+        }
+    }
+
+    /**
      * Метод получения инструмента типа {@link Currency} по тикеру
      *
      * @param string $ticker Тикер инструмента
@@ -304,6 +373,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Currency|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function currencyByTicker(string $ticker, string $class_name = null, bool $refresh = false, bool $raise = true): ?Currency
     {
@@ -368,6 +438,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Currency|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function currencyByFigi(string $figi, bool $refresh = false, bool $raise = true): ?Currency
     {
@@ -401,7 +472,54 @@ class InstrumentsProvider extends BaseDataProvider
     }
 
     /**
+     * Метод получения инструмента типа {@link Currency} по UID
+     *
+     * @param string $uid UID инструмента
+     * @param bool $refresh Признак необходимости получить новые данные из API Tinkoff Invest и обновить кэш. По умолчанию равно <code>false</code>
+     * @param bool $raise Признак необходимость бросить исключение, если инструмент не найден. По умолчанию равно <code>true</code>
+     *
+     * @return Currency|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
+     *
+     * @throws InstrumentNotFoundException
+     * @throws Exception
+     */
+    public function currencyByUid(string $uid, bool $refresh = false, bool $raise = true): ?Currency
+    {
+        try {
+            $instrument_type = 'currency';
+
+            if (!$refresh) {
+                if ($instrument = $this->getCachedInstrumentByUid($instrument_type, $uid)) {
+                    return $instrument;
+                }
+            }
+
+            if (!$this->_is_currencies_loaded || $refresh) {
+                $instruments = $this->loadAllCurrencies();
+
+                foreach ($instruments as $instrument) {
+                    if ($instrument->getUid() === $uid) {
+                        return $instrument;
+                    }
+                }
+            }
+
+            throw new InstrumentNotFoundException('Instrument is not found');
+        } catch (InstrumentNotFoundException $e) {
+            if ($raise) {
+                throw  $e;
+            }
+
+            return null;
+        }
+    }
+
+    /**
      * Метод получения инструмента типа {@link Etf} по тикеру
+     *
+     * ВАЖНО: Использование тикера для поиска инструментов идея "так себе", потому что одному тикеру может соответствовать несколько
+     * инструментов с разным FIGI. В методе сделана доработка, чтобы он пытался найти инструмент, у которого "tradingStatus":"SECURITY_TRADING_STATUS_NORMAL_TRADING".
+     * Метод вернет первый найденный инструмент с таким tradingStatus, если такового не обнаружится, то метод вернет ПОСЛЕДНИЙ в списке инструмент с указанным тикером
      *
      * @param string $ticker Тикер инструмента
      * @param string|null $class_name Режим торгов или <code>null</code>, тогда будет возвращен первый найденный
@@ -411,10 +529,14 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Etf|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function etfByTicker(string $ticker, string $class_name = null, bool $refresh = false, bool $raise = true): ?Etf
     {
         try {
+            $found_instrument_candidate_1 = null;
+            $found_instrument_candidate_2 = null;
+
             $instrument_type = 'etf';
             $instrument_id_type = InstrumentIdType::INSTRUMENT_ID_TYPE_TICKER;
 
@@ -450,9 +572,25 @@ class InstrumentsProvider extends BaseDataProvider
 
                 foreach ($instruments as $instrument) {
                     if ($instrument->getTicker() === $ticker) {
-                        return $instrument;
+                        $found_instrument_candidate_1 = $instrument;
+
+                        if ($instrument->getTradingStatus() === SecurityTradingStatus::SECURITY_TRADING_STATUS_NORMAL_TRADING) {
+                            $found_instrument_candidate_2 = $instrument;
+                        }
+
+                        if ($instrument->getTradingStatus() === SecurityTradingStatus::SECURITY_TRADING_STATUS_NORMAL_TRADING && $instrument->getApiTradeAvailableFlag()) {
+                            return $instrument;
+                        }
                     }
                 }
+            }
+
+            if ($found_instrument_candidate_2) {
+                return $found_instrument_candidate_2;
+            }
+
+            if ($found_instrument_candidate_1) {
+                return $found_instrument_candidate_1;
             }
 
             throw new InstrumentNotFoundException('Instrument is not found');
@@ -475,6 +613,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Etf|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function etfByFigi(string $figi, bool $refresh = false, bool $raise = true): ?Etf
     {
@@ -508,6 +647,49 @@ class InstrumentsProvider extends BaseDataProvider
     }
 
     /**
+     * Метод получения инструмента типа {@link Etf} по UID
+     *
+     * @param string $uid UID инструмента
+     * @param bool $refresh Признак необходимости получить новые данные из API Tinkoff Invest и обновить кэш. По умолчанию равно <code>false</code>
+     * @param bool $raise Признак необходимость бросить исключение, если инструмент не найден. По умолчанию равно <code>true</code>
+     *
+     * @return Etf|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
+     *
+     * @throws InstrumentNotFoundException
+     * @throws Exception
+     */
+    public function etfByUid(string $uid, bool $refresh = false, bool $raise = true): ?Etf
+    {
+        try {
+            $instrument_type = 'etf';
+
+            if (!$refresh) {
+                if ($instrument = $this->getCachedInstrumentByUid($instrument_type, $uid)) {
+                    return $instrument;
+                }
+            }
+
+            if (!$this->_is_etfs_loaded || $refresh) {
+                $instruments = $this->loadAllEtfs();
+
+                foreach ($instruments as $instrument) {
+                    if ($instrument->getUid() === $uid) {
+                        return $instrument;
+                    }
+                }
+            }
+
+            throw new InstrumentNotFoundException('Instrument is not found');
+        } catch (InstrumentNotFoundException $e) {
+            if ($raise) {
+                throw  $e;
+            }
+
+            return null;
+        }
+    }
+
+    /**
      * Метод получения инструмента типа {@link Future} по тикеру
      *
      * @param string $ticker Тикер инструмента
@@ -518,6 +700,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Future|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function futureByTicker(string $ticker, string $class_name = null, bool $refresh = false, bool $raise = true): ?Future
     {
@@ -582,6 +765,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Future|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function futureByFigi(string $figi, bool $refresh = false, bool $raise = true): ?Future
     {
@@ -615,7 +799,54 @@ class InstrumentsProvider extends BaseDataProvider
     }
 
     /**
+     * Метод получения инструмента типа {@link Future} по UID
+     *
+     * @param string $uid FIGI инструмента
+     * @param bool $refresh Признак необходимости получить новые данные из API Tinkoff Invest и обновить кэш. По умолчанию равно <code>false</code>
+     * @param bool $raise Признак необходимость бросить исключение, если инструмент не найден. По умолчанию равно <code>true</code>
+     *
+     * @return Future|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
+     *
+     * @throws InstrumentNotFoundException
+     * @throws Exception
+     */
+    public function futureByUid(string $uid, bool $refresh = false, bool $raise = true): ?Future
+    {
+        try {
+            $instrument_type = 'future';
+
+            if (!$refresh) {
+                if ($instrument = $this->getCachedInstrumentByUid($instrument_type, $uid)) {
+                    return $instrument;
+                }
+            }
+
+            if (!$this->_is_futures_loaded || $refresh) {
+                $instruments = $this->loadAllFutures();
+
+                foreach ($instruments as $instrument) {
+                    if ($instrument->getUid() === $uid) {
+                        return $instrument;
+                    }
+                }
+            }
+
+            throw new InstrumentNotFoundException('Instrument not found');
+        } catch (InstrumentNotFoundException $e) {
+            if ($raise) {
+                throw  $e;
+            }
+
+            return null;
+        }
+    }
+
+    /**
      * Метод получения инструмента типа {@link Share} по тикеру
+     *
+     * ВАЖНО: Использование тикера для поиска инструментов идея "так себе", потому что одному тикеру может соответствовать несколько
+     * инструментов с разным FIGI. В методе сделана доработка, чтобы он пытался найти инструмент, у которого "tradingStatus":"SECURITY_TRADING_STATUS_NORMAL_TRADING".
+     * Метод вернет первый найденный инструмент с таким tradingStatus, если такового не обнаружится, то метод вернет ПОСЛЕДНИЙ в списке инструмент с указанным тикером
      *
      * @param string $ticker Тикер инструмента
      * @param string|null $class_name Режим торгов или <code>null</code>, тогда будет возвращен первый найденный
@@ -625,10 +856,14 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Share|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function shareByTicker(string $ticker, string $class_name = null, bool $refresh = false, bool $raise = true): ?Share
     {
         try {
+            $found_instrument_candidate_1 = null;
+            $found_instrument_candidate_2 = null;
+
             $instrument_type = 'share';
             $instrument_id_type = InstrumentIdType::INSTRUMENT_ID_TYPE_TICKER;
 
@@ -664,9 +899,25 @@ class InstrumentsProvider extends BaseDataProvider
 
                 foreach ($instruments as $instrument) {
                     if ($instrument->getTicker() === $ticker) {
-                        return $instrument;
+                        $found_instrument_candidate_1 = $instrument;
+
+                        if ($instrument->getTradingStatus() === SecurityTradingStatus::SECURITY_TRADING_STATUS_NORMAL_TRADING) {
+                            $found_instrument_candidate_2 = $instrument;
+                        }
+
+                        if ($instrument->getTradingStatus() === SecurityTradingStatus::SECURITY_TRADING_STATUS_NORMAL_TRADING && $instrument->getApiTradeAvailableFlag()) {
+                            return $instrument;
+                        }
                     }
                 }
+            }
+
+            if ($found_instrument_candidate_2) {
+                return $found_instrument_candidate_2;
+            }
+
+            if ($found_instrument_candidate_1) {
+                return $found_instrument_candidate_1;
             }
 
             throw new InstrumentNotFoundException('Instrument is not found');
@@ -689,6 +940,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Share|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function shareByFigi(string $figi, bool $refresh = false, bool $raise = true): ?Share
     {
@@ -722,6 +974,49 @@ class InstrumentsProvider extends BaseDataProvider
     }
 
     /**
+     * Метод получения инструмента типа {@link Share} по UID
+     *
+     * @param string $uid UID инструмента
+     * @param bool $refresh Признак необходимости получить новые данные из API Tinkoff Invest и обновить кэш. По умолчанию равно <code>false</code>
+     * @param bool $raise Признак необходимость бросить исключение, если инструмент не найден. По умолчанию равно <code>true</code>
+     *
+     * @return Share|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
+     *
+     * @throws InstrumentNotFoundException
+     * @throws Exception
+     */
+    public function shareByUid(string $uid, bool $refresh = false, bool $raise = true): ?Share
+    {
+        try {
+            $instrument_type = 'share';
+
+            if (!$refresh) {
+                if ($instrument = $this->getCachedInstrumentByUid($instrument_type, $uid)) {
+                    return $instrument;
+                }
+            }
+
+            if (!$this->_is_shares_loaded || $refresh) {
+                $instruments = $this->loadAllShares();
+
+                foreach ($instruments as $instrument) {
+                    if ($instrument->getUid() === $uid) {
+                        return $instrument;
+                    }
+                }
+            }
+
+            throw new InstrumentNotFoundException('Instrument is not found');
+        } catch (InstrumentNotFoundException $e) {
+            if ($raise) {
+                throw  $e;
+            }
+
+            return null;
+        }
+    }
+
+    /**
      * Метод поиска инструмента по FIGI
      *
      * @param string $figi FIGI инструмента
@@ -731,6 +1026,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Bond|Currency|Etf|Future|Instrument|Share|null Найденный экземпляр инструмента или <code>null</code>
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function searchByFigi(string $figi, bool $raise = true)
     {
@@ -827,6 +1123,112 @@ class InstrumentsProvider extends BaseDataProvider
     }
 
     /**
+     * Метод поиска инструмента по UID
+     *
+     * @param string $uid UID инструмента
+     *
+     * @param bool $raise Признак необходимость бросить исключение, если инструмент не найден. По умолчанию равно <code>true</code>
+     *
+     * @return Bond|Currency|Etf|Future|Instrument|Share|null Найденный экземпляр инструмента или <code>null</code>
+     *
+     * @throws InstrumentNotFoundException
+     * @throws Exception
+     */
+    public function searchByUid(string $uid, bool $raise = true)
+    {
+        try {
+            for ($i = 1; $i <= 3; $i++) {
+                if ($i === 1) {
+                    /** В первый раунд поиска ищем по доступному кэшу среди типизированных экземпляров инструментов */
+                    if ($instrument = $this->getCachedInstrumentByUid('share', $uid)) {
+                        return $instrument;
+                    }
+
+                    if ($instrument = $this->getCachedInstrumentByUid('etf', $uid)) {
+                        return $instrument;
+                    }
+
+                    if ($instrument = $this->getCachedInstrumentByUid('currency', $uid)) {
+                        return $instrument;
+                    }
+
+                    if ($instrument = $this->getCachedInstrumentByUid('bond', $uid)) {
+                        return $instrument;
+                    }
+
+                    if ($instrument = $this->getCachedInstrumentByUid('future', $uid)) {
+                        return $instrument;
+                    }
+                } elseif ($i === 2) {
+                    /** Во второй раунд поиска дозагружаем справочники через API и ищем по ним среди типизированных экземпляров инструментов */
+                    if (!$this->_is_shares_loaded) {
+                        $instruments = $this->loadAllShares();
+
+                        foreach ($instruments as $instrument) {
+                            if ($instrument->getUid() === $uid) {
+                                return $instrument;
+                            }
+                        }
+                    }
+
+                    if (!$this->_is_etfs_loaded) {
+                        $instruments = $this->loadAllEtfs();
+
+                        foreach ($instruments as $instrument) {
+                            if ($instrument->getUid() === $uid) {
+                                return $instrument;
+                            }
+                        }
+                    }
+
+                    if (!$this->_is_currencies_loaded) {
+                        $instruments = $this->loadAllCurrencies();
+
+                        foreach ($instruments as $instrument) {
+                            if ($instrument->getUid() === $uid) {
+                                return $instrument;
+                            }
+                        }
+                    }
+
+                    if (!$this->_is_bonds_loaded) {
+                        $instruments = $this->loadAllBonds();
+
+                        foreach ($instruments as $instrument) {
+                            if ($instrument->getUid() === $uid) {
+                                return $instrument;
+                            }
+                        }
+                    }
+
+                    if (!$this->_is_futures_loaded) {
+                        $instruments = $this->loadAllFutures();
+
+                        foreach ($instruments as $instrument) {
+                            if ($instrument->getUid() === $uid) {
+                                return $instrument;
+                            }
+                        }
+                    }
+                } elseif ($i === 3) {
+                    /** В третий раунд поиска ищем не типизированный экземпляр инструмента */
+                    if ($instrument = $this->instrumentByUid($uid, false, false)) {
+                        return $instrument;
+                    }
+                }
+            }
+
+            throw new InstrumentNotFoundException('Instrument is not found');
+        } catch (InstrumentNotFoundException $e) {
+            if ($raise) {
+                throw  $e;
+            }
+
+            return null;
+        }
+    }
+
+    /**
      * Метод поиска инструмента по тикеру
      *
      * @param string $ticker Тикер инструмента
@@ -837,6 +1239,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Bond|Currency|Etf|Future|Instrument|Share|null Найденный экземпляр инструмента или <code>null</code>
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function searchByTicker(string $ticker, string $class_name = null, bool $raise = true)
     {
@@ -905,7 +1308,10 @@ class InstrumentsProvider extends BaseDataProvider
     /**
      * Метод получения инструмента типа {@link Instrument} по тикеру
      *
-     * Модель, содержащая основную информацию об инструменте
+     * Модель, содержащая основную информацию об инструменте.
+     *
+     * ВАЖНО: Использование тикера для поиска инструментов идея "так себе", потому что одному тикеру может соответствовать несколько
+     * инструментов с разным FIGI.
      *
      * @param string $ticker Тикер инструмента
      * @param string|null $class_name Режим торгов или <code>null</code>, тогда будет возвращен первый найденный
@@ -960,7 +1366,7 @@ class InstrumentsProvider extends BaseDataProvider
     }
 
     /**
-     * Метод получения инструмента типа {@link Instrument} по тикеру
+     * Метод получения инструмента типа {@link Instrument} по FIGI
      *
      * Модель, содержащая основную информацию об инструменте
      *
@@ -971,6 +1377,7 @@ class InstrumentsProvider extends BaseDataProvider
      * @return Instrument|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
      *
      * @throws InstrumentNotFoundException
+     * @throws Exception
      */
     public function instrumentByFigi(string $figi, bool $refresh = false, bool $raise = true): ?Instrument
     {
@@ -986,6 +1393,58 @@ class InstrumentsProvider extends BaseDataProvider
 
             $instruments_request = new InstrumentRequest();
             $instruments_request->setId($figi);
+            $instruments_request->setIdType($instrument_id_type);
+
+            /** @var InstrumentResponse $response */
+            list($response, $status) = $this->_clients_factory_model
+                ->instrumentsServiceClient
+                ->GetInstrumentBy($instruments_request)
+                ->wait();
+
+            if (!$response || !($instrument = $response->getInstrument())) {
+                throw new InstrumentNotFoundException('Instrument is not found');
+            }
+
+            $this->cacheToDictionary([$instrument]);
+
+            return $instrument;
+        } catch (InstrumentNotFoundException $e) {
+            if ($raise) {
+                throw  $e;
+            }
+
+            return null;
+        }
+    }
+
+    /**
+     * Метод получения инструмента типа {@link Instrument} по UID
+     *
+     * Модель, содержащая основную информацию об инструменте
+     *
+     * @param string $uid UID инструмента
+     * @param bool $refresh Признак необходимости получить новые данные из API Tinkoff Invest и обновить кэш. По умолчанию равно <code>false</code>
+     * @param bool $raise Признак необходимость бросить исключение, если инструмент не найден. По умолчанию равно <code>true</code>
+     *
+     * @return Instrument|null Экземпляр инструмента или <code>null</code>, если инструмент не найден и не требуется бросок исключения
+     *
+     * @throws InstrumentNotFoundException
+     * @throws Exception
+     */
+    public function instrumentByUid(string $uid, bool $refresh = false, bool $raise = true): ?Instrument
+    {
+        try {
+            $instrument_type = 'instrument';
+            $instrument_id_type = InstrumentIdType::INSTRUMENT_ID_TYPE_UID;
+
+            if (!$refresh) {
+                if ($instrument = $this->getCachedInstrumentByUid($instrument_type, $uid)) {
+                    return $instrument;
+                }
+            }
+
+            $instruments_request = new InstrumentRequest();
+            $instruments_request->setId($uid);
             $instruments_request->setIdType($instrument_id_type);
 
             /** @var InstrumentResponse $response */
@@ -1291,5 +1750,20 @@ class InstrumentsProvider extends BaseDataProvider
         $instrument_id_type = InstrumentIdType::INSTRUMENT_ID_TYPE_FIGI;
 
         return $this->_dictionary[$instrument_type][$instrument_id_type][$figi] ?? null;
+    }
+
+    /**
+     * Метод поиска инструмента по закешированному справочнику по UID
+     *
+     * @param string $instrument_type Тип инструмента
+     * @param string $uid UID инструмента
+     *
+     * @return Bond|Currency|Etf|Future|Share|Instrument|null
+     */
+    protected function getCachedInstrumentByUid(string $instrument_type, string $uid)
+    {
+        $instrument_id_type = InstrumentIdType::INSTRUMENT_ID_TYPE_UID;
+
+        return $this->_dictionary[$instrument_type][$instrument_id_type][$uid] ?? null;
     }
 }

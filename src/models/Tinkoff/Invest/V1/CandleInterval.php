@@ -20,35 +20,83 @@ class CandleInterval
      */
     const CANDLE_INTERVAL_UNSPECIFIED = 0;
     /**
-     *1 минута.
+     *от 1 минуты до 1 дня.
      *
      * Generated from protobuf enum <code>CANDLE_INTERVAL_1_MIN = 1;</code>
      */
     const CANDLE_INTERVAL_1_MIN = 1;
     /**
-     *5 минут.
+     *от 5 минут до 1 дня.
      *
      * Generated from protobuf enum <code>CANDLE_INTERVAL_5_MIN = 2;</code>
      */
     const CANDLE_INTERVAL_5_MIN = 2;
     /**
-     *15 минут.
+     *от 15 минут до 1 дня.
      *
      * Generated from protobuf enum <code>CANDLE_INTERVAL_15_MIN = 3;</code>
      */
     const CANDLE_INTERVAL_15_MIN = 3;
     /**
-     *1 час.
+     *от 1 часа до 1 недели.
      *
      * Generated from protobuf enum <code>CANDLE_INTERVAL_HOUR = 4;</code>
      */
     const CANDLE_INTERVAL_HOUR = 4;
     /**
-     *1 день.
+     *от 1 дня до 1 года.
      *
      * Generated from protobuf enum <code>CANDLE_INTERVAL_DAY = 5;</code>
      */
     const CANDLE_INTERVAL_DAY = 5;
+    /**
+     *от 2 минут до 1 дня.
+     *
+     * Generated from protobuf enum <code>CANDLE_INTERVAL_2_MIN = 6;</code>
+     */
+    const CANDLE_INTERVAL_2_MIN = 6;
+    /**
+     *от 3 минут до 1 дня.
+     *
+     * Generated from protobuf enum <code>CANDLE_INTERVAL_3_MIN = 7;</code>
+     */
+    const CANDLE_INTERVAL_3_MIN = 7;
+    /**
+     *от 10 минут до 1 дня.
+     *
+     * Generated from protobuf enum <code>CANDLE_INTERVAL_10_MIN = 8;</code>
+     */
+    const CANDLE_INTERVAL_10_MIN = 8;
+    /**
+     *от 30 минут до 2 дней.
+     *
+     * Generated from protobuf enum <code>CANDLE_INTERVAL_30_MIN = 9;</code>
+     */
+    const CANDLE_INTERVAL_30_MIN = 9;
+    /**
+     *от 2 часов до 1 месяца.
+     *
+     * Generated from protobuf enum <code>CANDLE_INTERVAL_2_HOUR = 10;</code>
+     */
+    const CANDLE_INTERVAL_2_HOUR = 10;
+    /**
+     *от 4 часов до 1 месяца.
+     *
+     * Generated from protobuf enum <code>CANDLE_INTERVAL_4_HOUR = 11;</code>
+     */
+    const CANDLE_INTERVAL_4_HOUR = 11;
+    /**
+     *от 1 недели до 2 лет.
+     *
+     * Generated from protobuf enum <code>CANDLE_INTERVAL_WEEK = 12;</code>
+     */
+    const CANDLE_INTERVAL_WEEK = 12;
+    /**
+     *от 1 месяца до 10 лет.
+     *
+     * Generated from protobuf enum <code>CANDLE_INTERVAL_MONTH = 13;</code>
+     */
+    const CANDLE_INTERVAL_MONTH = 13;
 
     private static $valueToName = [
         self::CANDLE_INTERVAL_UNSPECIFIED => 'CANDLE_INTERVAL_UNSPECIFIED',
@@ -57,6 +105,14 @@ class CandleInterval
         self::CANDLE_INTERVAL_15_MIN => 'CANDLE_INTERVAL_15_MIN',
         self::CANDLE_INTERVAL_HOUR => 'CANDLE_INTERVAL_HOUR',
         self::CANDLE_INTERVAL_DAY => 'CANDLE_INTERVAL_DAY',
+        self::CANDLE_INTERVAL_2_MIN => 'CANDLE_INTERVAL_2_MIN',
+        self::CANDLE_INTERVAL_3_MIN => 'CANDLE_INTERVAL_3_MIN',
+        self::CANDLE_INTERVAL_10_MIN => 'CANDLE_INTERVAL_10_MIN',
+        self::CANDLE_INTERVAL_30_MIN => 'CANDLE_INTERVAL_30_MIN',
+        self::CANDLE_INTERVAL_2_HOUR => 'CANDLE_INTERVAL_2_HOUR',
+        self::CANDLE_INTERVAL_4_HOUR => 'CANDLE_INTERVAL_4_HOUR',
+        self::CANDLE_INTERVAL_WEEK => 'CANDLE_INTERVAL_WEEK',
+        self::CANDLE_INTERVAL_MONTH => 'CANDLE_INTERVAL_MONTH',
     ];
 
     public static function name($value)

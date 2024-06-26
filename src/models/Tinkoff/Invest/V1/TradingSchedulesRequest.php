@@ -9,7 +9,7 @@ use Google\Protobuf\Internal\RepeatedField;
 use Google\Protobuf\Internal\GPBUtil;
 
 /**
- *Запрос расписания торгов
+ *Запрос расписания торгов.
  *
  * Generated from protobuf message <code>tinkoff.public.invest.api.contract.v1.TradingSchedulesRequest</code>
  */
@@ -20,7 +20,7 @@ class TradingSchedulesRequest extends \Google\Protobuf\Internal\Message
      *
      * Generated from protobuf field <code>string exchange = 1;</code>
      */
-    protected $exchange = '';
+    protected $exchange = null;
     /**
      *Начало периода по часовому поясу UTC.
      *
@@ -61,7 +61,17 @@ class TradingSchedulesRequest extends \Google\Protobuf\Internal\Message
      */
     public function getExchange()
     {
-        return $this->exchange;
+        return isset($this->exchange) ? $this->exchange : '';
+    }
+
+    public function hasExchange()
+    {
+        return isset($this->exchange);
+    }
+
+    public function clearExchange()
+    {
+        unset($this->exchange);
     }
 
     /**

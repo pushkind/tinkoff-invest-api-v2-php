@@ -17,7 +17,7 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод регистрации счёта в песочнице.
+     * Зарегистрировать счёт.
      * @param \Tinkoff\Invest\V1\OpenSandboxAccountRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -32,7 +32,7 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод получения счетов в песочнице.
+     * Получить счета.
      * @param \Tinkoff\Invest\V1\GetAccountsRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -47,7 +47,7 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод закрытия счёта в песочнице.
+     * Закрыть счёт.
      * @param \Tinkoff\Invest\V1\CloseSandboxAccountRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -62,7 +62,7 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод выставления торгового поручения в песочнице.
+     * Выставить торговое поручение.
      * @param \Tinkoff\Invest\V1\PostOrderRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -77,7 +77,22 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод получения списка активных заявок по счёту в песочнице.
+     * Изменить выставленную заявку.
+     * @param \Tinkoff\Invest\V1\ReplaceOrderRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function ReplaceSandboxOrder(\Tinkoff\Invest\V1\ReplaceOrderRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/tinkoff.public.invest.api.contract.v1.SandboxService/ReplaceSandboxOrder',
+        $argument,
+        ['\Tinkoff\Invest\V1\PostOrderResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Получить список активных заявок по счёту.
      * @param \Tinkoff\Invest\V1\GetOrdersRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -92,7 +107,7 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод отмены торгового поручения в песочнице.
+     * Отменить торговое поручение.
      * @param \Tinkoff\Invest\V1\CancelOrderRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -107,7 +122,7 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод получения статуса заявки в песочнице.
+     * Поулчить статус заявки в песочнице. Заявки хранятся в таблице 7 дней.
      * @param \Tinkoff\Invest\V1\GetOrderStateRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -122,7 +137,7 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод получения позиций по виртуальному счёту песочницы.
+     * Получить позиции по виртуальному счёту.
      * @param \Tinkoff\Invest\V1\PositionsRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -137,7 +152,7 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод получения операций в песочнице по номеру счёта.
+     * Получить операции по номеру счёта.
      * @param \Tinkoff\Invest\V1\OperationsRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -152,7 +167,22 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод получения портфолио в песочнице.
+     * Получить операции по номеру счёта с пагинацией.
+     * @param \Tinkoff\Invest\V1\GetOperationsByCursorRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function GetSandboxOperationsByCursor(\Tinkoff\Invest\V1\GetOperationsByCursorRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/tinkoff.public.invest.api.contract.v1.SandboxService/GetSandboxOperationsByCursor',
+        $argument,
+        ['\Tinkoff\Invest\V1\GetOperationsByCursorResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Получить портфель.
      * @param \Tinkoff\Invest\V1\PortfolioRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -167,7 +197,7 @@ class SandboxServiceClient extends \Grpc\BaseStub {
     }
 
     /**
-     * Метод пополнения счёта в песочнице.
+     * Пополнить счёт.
      * @param \Tinkoff\Invest\V1\SandboxPayInRequest $argument input argument
      * @param array $metadata metadata
      * @param array $options call options
@@ -178,6 +208,36 @@ class SandboxServiceClient extends \Grpc\BaseStub {
         return $this->_simpleRequest('/tinkoff.public.invest.api.contract.v1.SandboxService/SandboxPayIn',
         $argument,
         ['\Tinkoff\Invest\V1\SandboxPayInResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Получить доступный остаток для вывода средств.
+     * @param \Tinkoff\Invest\V1\WithdrawLimitsRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function GetSandboxWithdrawLimits(\Tinkoff\Invest\V1\WithdrawLimitsRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/tinkoff.public.invest.api.contract.v1.SandboxService/GetSandboxWithdrawLimits',
+        $argument,
+        ['\Tinkoff\Invest\V1\WithdrawLimitsResponse', 'decode'],
+        $metadata, $options);
+    }
+
+    /**
+     * Расчёт количества доступных для покупки/продажи лотов в песочнице.
+     * @param \Tinkoff\Invest\V1\GetMaxLotsRequest $argument input argument
+     * @param array $metadata metadata
+     * @param array $options call options
+     * @return \Grpc\UnaryCall
+     */
+    public function GetSandboxMaxLots(\Tinkoff\Invest\V1\GetMaxLotsRequest $argument,
+      $metadata = [], $options = []) {
+        return $this->_simpleRequest('/tinkoff.public.invest.api.contract.v1.SandboxService/GetSandboxMaxLots',
+        $argument,
+        ['\Tinkoff\Invest\V1\GetMaxLotsResponse', 'decode'],
         $metadata, $options);
     }
 

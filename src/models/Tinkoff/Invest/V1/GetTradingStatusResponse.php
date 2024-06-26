@@ -45,6 +45,24 @@ class GetTradingStatusResponse extends \Google\Protobuf\Internal\Message
      * Generated from protobuf field <code>bool api_trade_available_flag = 5;</code>
      */
     protected $api_trade_available_flag = false;
+    /**
+     *Uid инструмента.
+     *
+     * Generated from protobuf field <code>string instrument_uid = 6;</code>
+     */
+    protected $instrument_uid = '';
+    /**
+     *Признак доступности завяки по лучшей цене
+     *
+     * Generated from protobuf field <code>bool bestprice_order_available_flag = 8;</code>
+     */
+    protected $bestprice_order_available_flag = false;
+    /**
+     *Признак доступности только заявки по лучшей цене
+     *
+     * Generated from protobuf field <code>bool only_best_price = 9;</code>
+     */
+    protected $only_best_price = false;
 
     /**
      * Constructor.
@@ -62,6 +80,12 @@ class GetTradingStatusResponse extends \Google\Protobuf\Internal\Message
      *          Признак доступности выставления рыночной заявки по инструменту.
      *     @type bool $api_trade_available_flag
      *          Признак доступности торгов через API.
+     *     @type string $instrument_uid
+     *          Uid инструмента.
+     *     @type bool $bestprice_order_available_flag
+     *          Признак доступности завяки по лучшей цене
+     *     @type bool $only_best_price
+     *          Признак доступности только заявки по лучшей цене
      * }
      */
     public function __construct($data = NULL) {
@@ -195,6 +219,84 @@ class GetTradingStatusResponse extends \Google\Protobuf\Internal\Message
     {
         GPBUtil::checkBool($var);
         $this->api_trade_available_flag = $var;
+
+        return $this;
+    }
+
+    /**
+     *Uid инструмента.
+     *
+     * Generated from protobuf field <code>string instrument_uid = 6;</code>
+     * @return string
+     */
+    public function getInstrumentUid()
+    {
+        return $this->instrument_uid;
+    }
+
+    /**
+     *Uid инструмента.
+     *
+     * Generated from protobuf field <code>string instrument_uid = 6;</code>
+     * @param string $var
+     * @return $this
+     */
+    public function setInstrumentUid($var)
+    {
+        GPBUtil::checkString($var, True);
+        $this->instrument_uid = $var;
+
+        return $this;
+    }
+
+    /**
+     *Признак доступности завяки по лучшей цене
+     *
+     * Generated from protobuf field <code>bool bestprice_order_available_flag = 8;</code>
+     * @return bool
+     */
+    public function getBestpriceOrderAvailableFlag()
+    {
+        return $this->bestprice_order_available_flag;
+    }
+
+    /**
+     *Признак доступности завяки по лучшей цене
+     *
+     * Generated from protobuf field <code>bool bestprice_order_available_flag = 8;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setBestpriceOrderAvailableFlag($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->bestprice_order_available_flag = $var;
+
+        return $this;
+    }
+
+    /**
+     *Признак доступности только заявки по лучшей цене
+     *
+     * Generated from protobuf field <code>bool only_best_price = 9;</code>
+     * @return bool
+     */
+    public function getOnlyBestPrice()
+    {
+        return $this->only_best_price;
+    }
+
+    /**
+     *Признак доступности только заявки по лучшей цене
+     *
+     * Generated from protobuf field <code>bool only_best_price = 9;</code>
+     * @param bool $var
+     * @return $this
+     */
+    public function setOnlyBestPrice($var)
+    {
+        GPBUtil::checkBool($var);
+        $this->only_best_price = $var;
 
         return $this;
     }

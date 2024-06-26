@@ -15,6 +15,10 @@ use Google\Protobuf\Internal\GPBUtil;
  */
 class AssetsRequest extends \Google\Protobuf\Internal\Message
 {
+    /**
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.InstrumentType instrument_type = 1;</code>
+     */
+    protected $instrument_type = null;
 
     /**
      * Constructor.
@@ -22,11 +26,44 @@ class AssetsRequest extends \Google\Protobuf\Internal\Message
      * @param array $data {
      *     Optional. Data for populating the Message object.
      *
+     *     @type int $instrument_type
      * }
      */
     public function __construct($data = NULL) {
         \GPBMetadata\Instruments::initOnce();
         parent::__construct($data);
+    }
+
+    /**
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.InstrumentType instrument_type = 1;</code>
+     * @return int
+     */
+    public function getInstrumentType()
+    {
+        return isset($this->instrument_type) ? $this->instrument_type : 0;
+    }
+
+    public function hasInstrumentType()
+    {
+        return isset($this->instrument_type);
+    }
+
+    public function clearInstrumentType()
+    {
+        unset($this->instrument_type);
+    }
+
+    /**
+     * Generated from protobuf field <code>.tinkoff.public.invest.api.contract.v1.InstrumentType instrument_type = 1;</code>
+     * @param int $var
+     * @return $this
+     */
+    public function setInstrumentType($var)
+    {
+        GPBUtil::checkEnum($var, \Tinkoff\Invest\V1\InstrumentType::class);
+        $this->instrument_type = $var;
+
+        return $this;
     }
 
 }
